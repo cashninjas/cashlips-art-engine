@@ -1,13 +1,8 @@
-const basePath = process.cwd();
-const { NETWORK } = require(`${basePath}/constants/network.js`);
-const fs = require("fs");
-const sha1 = require(`${basePath}/node_modules/sha1`);
-const { createCanvas, loadImage } = require(`${basePath}/node_modules/canvas`);
-const buildDir = `${basePath}/build`;
-const layersDir = `${basePath}/layers`;
-const {
+import {
   format,
+  iconFormat,
   baseUri,
+  baseIconUri,
   description,
   background,
   uniqueDnaTorrance,
@@ -19,27 +14,47 @@ const {
   text,
   namePrefix,
   network,
+  bchMetadata,
+  bcmrMetadata,
   solanaMetadata,
   gif,
-} = require(`${basePath}/src/config.js`);
+  collectionName,
+  collectionDescription,
+} from './config.js';
+import {
+  bigIntToVmNumber,
+  binToHex,
+} from '@bitauth/libauth';
+import { NETWORK } from '../constants/network.js';
+import fs from "fs";
+import sha1 from 'sha1/sha1.js';
+import { createCanvas, loadImage, Image } from 'canvas';
+import HashlipsGiffer from '../modules/HashlipsGiffer.js';
+import { createHash } from "crypto";
+
+const basePath = process.cwd();
+const buildDir = `${basePath}/build`;
+const layersDir = `${basePath}/layers`;
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = format.smoothing;
+const iconCanvas = createCanvas(iconFormat.width, iconFormat.height);
+const iconCtx = iconCanvas.getContext("2d");
+const DNA_DELIMITER = "-";
 var metadataList = [];
 var attributesList = [];
 var dnaList = new Set();
-const DNA_DELIMITER = "-";
-const HashlipsGiffer = require(`${basePath}/modules/HashlipsGiffer.js`);
-
 let hashlipsGiffer = null;
 
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
-    fs.rmdirSync(buildDir, { recursive: true });
+    fs.rmSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
   fs.mkdirSync(`${buildDir}/json`);
+  fs.mkdirSync(`${buildDir}/bcmr`);
   fs.mkdirSync(`${buildDir}/images`);
+  fs.mkdirSync(`${buildDir}/icons`);
   if (gif.export) {
     fs.mkdirSync(`${buildDir}/gifs`);
   }
@@ -117,6 +132,29 @@ const saveImage = (_editionCount) => {
   );
 };
 
+const saveImageIcon = async (_editionCount) => {
+  if (!iconFormat.enabled) {
+    return;
+  }
+
+  let img = new Image();
+  img.src = canvas.toDataURL();
+
+  iconCtx.drawImage(
+    img,
+    0,
+    0,
+    iconFormat.width,
+    iconFormat.height,
+
+  );
+
+  fs.writeFileSync(
+    `${buildDir}/icons/${_editionCount}.png`,
+    iconCanvas.toBuffer("image/png")
+  )
+}
+
 const genColor = () => {
   let hue = Math.floor(Math.random() * 360);
   let pastel = `hsl(${hue}, 100%, ${background.brightness})`;
@@ -128,6 +166,13 @@ const drawBackground = () => {
   ctx.fillRect(0, 0, format.width, format.height);
 };
 
+const imageHash256 = (imgPath) => {
+  const buff = fs.readFileSync(imgPath);
+  const hash = createHash("sha256").update(buff).digest("hex");
+
+  return hash;
+};
+
 const addMetadata = (_dna, _edition) => {
   let dateTime = Date.now();
   let tempMetadata = {
@@ -137,10 +182,14 @@ const addMetadata = (_dna, _edition) => {
     dna: sha1(_dna),
     edition: _edition,
     date: dateTime,
+    imageHash: imageHash256(`${buildDir}/images/${_edition}.png`),
     ...extraMetadata,
     attributes: attributesList,
-    compiler: "HashLips Art Engine",
   };
+  if (iconFormat.enabled) {
+    tempMetadata['icon'] = `${baseIconUri}/${_edition}.png`;
+    tempMetadata['iconHash'] = imageHash256(`${buildDir}/icons/${_edition}.png`);
+  }
   if (network == NETWORK.sol) {
     tempMetadata = {
       //Added metadata for solana
@@ -203,18 +252,18 @@ const drawElement = (_renderObject, _index, _layersLen) => {
   ctx.globalCompositeOperation = _renderObject.layer.blend;
   text.only
     ? addText(
-        `${_renderObject.layer.name}${text.spacer}${_renderObject.layer.selectedElement.name}`,
-        text.xGap,
-        text.yGap * (_index + 1),
-        text.size
-      )
+      `${_renderObject.layer.name}${text.spacer}${_renderObject.layer.selectedElement.name}`,
+      text.xGap,
+      text.yGap * (_index + 1),
+      text.size
+    )
     : ctx.drawImage(
-        _renderObject.loadedImage,
-        0,
-        0,
-        format.width,
-        format.height
-      );
+      _renderObject.loadedImage,
+      0,
+      0,
+      format.width,
+      format.height
+    );
 
   addAttributes(_renderObject);
 };
@@ -293,8 +342,7 @@ const createDna = (_layers) => {
       random -= layer.elements[i].weight;
       if (random < 0) {
         return randNum.push(
-          `${layer.elements[i].id}:${layer.elements[i].filename}${
-            layer.bypassDNA ? "?bypassDNA=true" : ""
+          `${layer.elements[i].id}:${layer.elements[i].filename}${layer.bypassDNA ? "?bypassDNA=true" : ""
           }`
         );
       }
@@ -303,16 +351,66 @@ const createDna = (_layers) => {
   return randNum.join(DNA_DELIMITER);
 };
 
+// All updates are actually done through this method.
+// We will chain on the writeBCMR flow for BCH collections.
 const writeMetaData = (_data) => {
   fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
+  if (network == NETWORK.bch) {
+    writeBCMR();
+  }
 };
+
+const writeBCMR = () => {
+  let data = JSON.parse(fs.readFileSync(`${basePath}/build/json/_metadata.json`));
+  let bcmr = bcmrMetadata;
+  let date = new Date().toISOString();
+
+  bcmr.latestRevision = date;
+  bcmr.identities[bchMetadata.category] = {}
+  let nfts = {}
+  data.forEach((o, i) => {
+    let attributes = {};
+    o.attributes.forEach((oldFormat) => {
+      attributes[oldFormat.trait_type] = oldFormat.value;
+    });
+    nfts[binToHex(bigIntToVmNumber(BigInt(i)))] = {
+      "name": o.name,
+      "description": o.description,
+      "uris": {
+        "icon": o.icon,
+        "image": o.image,
+      },
+      "extensions": {
+        "attributes": attributes,
+        "image-hash": o.imageHash,
+        "icon-hash": o.iconHash,
+        ...extraMetadata,
+      },
+    }
+  });
+
+  bcmr.identities[bchMetadata.category][date] = {
+    name: collectionName,
+    description: collectionDescription,
+    uris: bchMetadata.uris,
+    token: {
+      category: bchMetadata.category,
+      symbol: bchMetadata.symbol,
+      nfts: { parse: { types: nfts } }
+    }
+  }
+
+  fs.writeFileSync(`${buildDir}/bcmr/bitcoin-cash-metadata-registry.json`, JSON.stringify(bcmr, null, 2));
+
+  return;
+}
 
 const saveMetaDataSingleFile = (_editionCount) => {
   let metadata = metadataList.find((meta) => meta.edition == _editionCount);
   debugLogs
     ? console.log(
-        `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
-      )
+      `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
+    )
     : null;
   fs.writeFileSync(
     `${buildDir}/json/${_editionCount}.json`,
@@ -402,6 +500,7 @@ const startCreating = async () => {
             ? console.log("Editions left to create: ", abstractedIndexes)
             : null;
           saveImage(abstractedIndexes[0]);
+          saveImageIcon(abstractedIndexes[0]);
           addMetadata(newDna, abstractedIndexes[0]);
           saveMetaDataSingleFile(abstractedIndexes[0]);
           console.log(
@@ -429,4 +528,4 @@ const startCreating = async () => {
   writeMetaData(JSON.stringify(metadataList, null, 2));
 };
 
-module.exports = { startCreating, buildSetup, getElements };
+export { startCreating, buildSetup, getElements, writeMetaData };

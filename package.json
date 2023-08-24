@@ -1,9 +1,10 @@
 {
-  "name": "hashlips_art_engine",
-  "version": "1.1.1",
-  "description": "HashLips Art Engine is a tool used to create multiple different instances of artworks based on provided layers.",
-  "main": "index.js",
+  "name": "shinobi_art_engine",
+  "version": "1.0.0",
+  "description": "Shinobi Art Engine is a tool used to create multiple different instances of artworks based on provided layers.",
+  "exports": "./index.js",
   "bin": "index.js",
+  "type": "module",
   "pkg": {
     "assets": [
       "layers/**/*",
@@ -13,19 +14,21 @@
   },
   "scripts": {
     "build": "node index.js",
-    "generate": "node index.js",
     "rarity": "node utils/rarity.js",
     "preview": "node utils/preview.js",
     "pixelate": "node utils/pixelate.js",
     "update_info": "node utils/update_info.js",
     "preview_gif": "node utils/preview_gif.js",
-    "generate_metadata": "node utils/generate_metadata.js"
+    "openai": "node utils/openai.js"
   },
-  "author": "Daniel Eugene Botha (HashLips)",
+  "author": "CashNinjas",
   "license": "MIT",
   "dependencies": {
+    "@bitauth/libauth": "2.0.0-alpha.8",
     "canvas": "^2.8.0",
+    "dotenv": "^16.3.1",
     "gif-encoder-2": "^1.0.5",
+    "openai": "^4.6.0",
     "sha1": "^1.1.1"
   }
 }

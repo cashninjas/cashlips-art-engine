@@ -1,19 +1,25 @@
-const fs = require("fs");
-const path = require("path");
-const { createCanvas, loadImage } = require("canvas");
+import fs from "fs";
+import path from "path";
+import console from "console";
+
+import { createCanvas, loadImage, Image } from "canvas";
+import { format, iconFormat, pixelFormat } from '../src/config.js';
+
 const basePath = process.cwd();
 const buildDir = `${basePath}/build/pixel_images`;
 const inputDir = `${basePath}/build/images`;
-const { format, pixelFormat } = require(`${basePath}/src/config.js`);
-const console = require("console");
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
+const iconCanvas = createCanvas(iconFormat.width, iconFormat.height);
+const iconCtx = iconCanvas.getContext("2d");
 
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
-    fs.rmdirSync(buildDir, { recursive: true });
+    fs.rmSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
+  fs.mkdirSync(`${buildDir}/images`);
+  fs.mkdirSync(`${buildDir}/icons`);
 };
 
 const getImages = (_dir) => {
@@ -53,6 +59,7 @@ const draw = (_imgObject) => {
   let size = pixelFormat.ratio;
   let w = canvas.width * size;
   let h = canvas.height * size;
+
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(_imgObject.loadedImage, 0, 0, w, h);
   ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
@@ -60,12 +67,37 @@ const draw = (_imgObject) => {
 
 const saveImage = (_loadedImageObject) => {
   fs.writeFileSync(
-    `${buildDir}/${_loadedImageObject.imgObject.filename}`,
+    `${buildDir}/images/${_loadedImageObject.imgObject.filename}`,
     canvas.toBuffer("image/png")
   );
 };
 
-const startCreating = async () => {
+const saveImageIcon = (_loadedImageObject) => {
+  if (!iconFormat.enabled) {
+    return;
+  }
+
+  let img = new Image();
+  img.src = canvas.toDataURL();
+
+  iconCtx.drawImage(
+    img,
+    0,
+    0,
+    iconFormat.width,
+    iconFormat.height,
+
+  );
+
+  fs.writeFileSync(
+    `${buildDir}/icons/${_loadedImageObject.imgObject.filename}`,
+    iconCanvas.toBuffer("image/png")
+  )
+}
+
+const createPixelatedImages = async () => {
+  buildSetup();
+
   const images = getImages(inputDir);
   if (images == null) {
     console.log("Please generate collection first.");
@@ -79,10 +111,11 @@ const startCreating = async () => {
     loadedImageObjectArray.forEach((loadedImageObject) => {
       draw(loadedImageObject);
       saveImage(loadedImageObject);
-      console.log(`Pixelated image: ${loadedImageObject.imgObject.filename}`);
+      saveImageIcon(loadedImageObject);
     });
   });
 };
 
-buildSetup();
-startCreating();
+// Create pixelated images.
+// Execution begins here.
+await createPixelatedImages();

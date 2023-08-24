@@ -1,24 +1,20 @@
+import fs from "fs";
+
+import { createCanvas, loadImage } from "canvas";
+
+import { preview } from '../src/config.js';
+
 const basePath = process.cwd();
-const fs = require("fs");
-const { createCanvas, loadImage } = require("canvas");
 const buildDir = `${basePath}/build`;
-
-const { preview } = require(`${basePath}/src/config.js`);
-
-// read json data
 const rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);
 const metadataList = JSON.parse(rawdata);
 
 const saveProjectPreviewImage = async (_data) => {
-  // Extract from preview config
   const { thumbWidth, thumbPerRow, imageRatio, imageName } = preview;
-  // Calculate height on the fly
   const thumbHeight = thumbWidth * imageRatio;
-  // Prepare canvas
   const previewCanvasWidth = thumbWidth * thumbPerRow;
   const previewCanvasHeight =
     thumbHeight * Math.ceil(_data.length / thumbPerRow);
-  // Shout from the mountain tops
   console.log(
     `Preparing a ${previewCanvasWidth}x${previewCanvasHeight} project preview with ${_data.length} thumbnails.`
   );
@@ -43,9 +39,10 @@ const saveProjectPreviewImage = async (_data) => {
     });
   }
 
-  // Write Project Preview to file
   fs.writeFileSync(previewPath, previewCanvas.toBuffer("image/png"));
   console.log(`Project preview image located at: ${previewPath}`);
 };
 
-saveProjectPreviewImage(metadataList);
+// Create preview image.
+// Execution begins here.
+await saveProjectPreviewImage(metadataList);

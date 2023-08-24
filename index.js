@@ -1,5 +1,4 @@
-const basePath = process.cwd();
-const { startCreating, buildSetup } = require(`${basePath}/src/main.js`);
+import { startCreating, buildSetup } from './src/main.js';
 
 (() => {
   buildSetup();

@@ -1,33 +1,24 @@
-# Welcome to HashLips 👄
+![](https://github.com/cashninjas/shinobi-art-engine/blob/main/shinobi.png)
 
-![](https://github.com/HashLips/hashlips_art_engine/blob/main/logo.png)
+# Shinobi Art Engine 🔥
 
-All the code in these repos was created and explained by HashLips on the main YouTube channel.
+This is a fork of the excellent [HashLips Art Engine](https://github.com/HashLips/hashlips_art_engine) which adds the following features:
 
-To find out more please visit:
+- Support for BCH [CashTokens](https://cashtokens.org) NFT projects.
+- Icon generation for ETH and BCH projects.
+- Updated to use ES module imports instead of `require()` statements.
+- New Shinobi example layers!
+- OpenAI integration to generate names and descriptions!
+- Tons of small code cleanups and optimizations!
 
-[📺 YouTube](https://www.youtube.com/channel/UC1LV4_VQGBJHTJjEWUmy8nA)
-
-[👄 Discord](https://discord.com/invite/qh6MWhMJDN)
-
-[💬 Telegram](https://t.me/hashlipsnft)
-
-[🐦 Twitter](https://twitter.com/hashlipsnft)
-
-[ℹ️ Website](https://hashlips.online/HashLips)
-
-# HashLips Art Engine 🔥
-
-![](https://github.com/HashLips/hashlips_art_engine/blob/main/banner.png)
-
-Create generative art by using the canvas api and node js. Before you use the generation engine, make sure you have node.js(v10.18.0) installed.
+Create generative art by using the canvas api and node js. Before you use the generation engine, make sure you have node.js installed.
 
 ## Installation 🛠️
 
 If you are cloning the project then run this first, otherwise you can download the source code on the release page and skip this step.
 
 ```sh
-git clone https://github.com/HashLips/hashlips_art_engine.git
+git clone https://github.com/cashninjas/shinobi-art-engine.git
 ```
 
 Go to the root of your folder and run this command if you have yarn installed.
@@ -42,7 +33,22 @@ Alternatively you can run this command if you have node installed.
 npm install
 ```
 
-## Usage ℹ️
+## Environment
+
+A couple settings are tunable with a `.env` file.
+
+If you want to keep your IPFS CIDs private, it is good practice to keep them out of the repository. You can use the following env vars:
+
+```
+SHINOBI_BASE_URI=ipfs://IPFS_IMAGE_DIR_CID
+SHINOBI_BASE_ICON_URI=ipfs://IPFS_ICON_DIR_CID
+```
+
+NOTE: The first build will create your assets, then when you post your images and icons to IPFS you will get the CIDs. When your `.env` file is setup, run `npm run update_info` to update your project metadata.
+
+In order to use OpenAI features, you will need an OpenAI API key. Make sure `OPENAI_API_KEY` is set in your `.env` file.
+
+## Usage
 
 Create your different layers as folders in the 'layers' directory, and add all the layer assets in these directories. You can name the assets anything as long as it has a rarity weight attached in the file name like so: `example element#70.png`. You can optionally change the delimiter `#` to anything you would like to use in the variable `rarityDelimiter` in the `src/config.js` file.
 
@@ -122,24 +128,15 @@ const layerConfigurations = [
   {
     growEditionSizeTo: 5,
     layersOrder: [
-      { name: "Background" , {
+      { name: "Background",
         options: {
-          bypassDNA: false;
-        }
-      }},
-      { name: "Eyeball" },
-      {
-        name: "Eye color",
-        options: {
-          blend: MODE.destinationIn,
-          opacity: 0.2,
-          displayName: "Awesome Eye Color",
+          bypassDNA: false,
         },
       },
-      { name: "Iris" },
-      { name: "Shine" },
-      { name: "Bottom lid", options: { blend: MODE.overlay, opacity: 0.7 } },
-      { name: "Top lid" },
+      { name: "Glow" },
+      { name: "Weapons", options: { blend: MODE.overlay, opacity: 0.7 } },
+      { name: "Body" },
+      { name: "Eyes" },
     ],
   },
 ];
@@ -178,7 +175,7 @@ const MODE = {
 };
 ```
 
-When you are ready, run the following command and your outputted art will be in the `build/images` directory and the json in the `build/json` directory:
+When you are ready, run the following command and your outputted art will be in the `build/images` directory, the json in the `build/json` directory, icons in the `build/icons` directory, and full BCMR metadata will be in the `build/bcmr` directory.:
 
 ```sh
 npm run build
@@ -194,24 +191,41 @@ The program will output all the images in the `build/images` directory along wit
 
 ```json
 {
-  "dna": "d956cdf4e460508b5ff90c21974124f68d6edc34",
-  "name": "#1",
-  "description": "This is the description of your NFT project",
-  "image": "https://hashlips/nft/1.png",
+  "name": "Your Collection #1",
+  "description": "Remember to replace this description",
+  "image": "ipfs://NewUriToReplace/images/1.png",
+  "dna": "f208b7438a5cc9b7a0d1d9a832f68b26163cd8e9",
   "edition": 1,
-  "date": 1731990799975,
+  "date": 1694061887403,
+  "imageHash": "fe4ecdca5f0307b4ceb923174d9218dd03998a86bf46ee0087f4bc0c7bd9f273",
   "attributes": [
-    { "trait_type": "Background", "value": "Black" },
-    { "trait_type": "Eyeball", "value": "Red" },
-    { "trait_type": "Eye color", "value": "Yellow" },
-    { "trait_type": "Iris", "value": "Small" },
-    { "trait_type": "Shine", "value": "Shapes" },
-    { "trait_type": "Bottom lid", "value": "Low" },
-    { "trait_type": "Top lid", "value": "Middle" }
+    {
+      "trait_type": "Background",
+      "value": "Tower"
+    },
+    {
+      "trait_type": "Glow",
+      "value": "White"
+    },
+    {
+      "trait_type": "Weapons",
+      "value": "Bow and Arrow"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Shadow"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "White"
+    }
   ],
-  "compiler": "HashLips Art Engine"
+  "icon": "ipfs://NewUriToReplace/icons/1.png",
+  "iconHash": "70ef4b4210dbc657848caa6b1e1c2fd901468570246f8b2e9e030b89cb146355"
 }
 ```
+
+The BCMR metadata will bein the `build/bcmr` directory for BCH collections! You can find more information about the BCMR format at [https://cashtokens.org/docs/bcmr/chip/](https://cashtokens.org/docs/bcmr/chip/)
 
 You can also add extra metadata to each metadata file by adding your extra items, (key: value) pairs to the `extraMetadata` object variable in the `config.js` file.
 
@@ -239,6 +253,14 @@ You might possibly want to update the baseUri and description after you have ran
 npm run update_info
 ```
 
+### OpenAI generated names and descriptions
+
+To create unique names and fun descriptions for your collection, run:
+
+```sh
+npm run openai
+```
+
 ### Generate a preview image
 
 Create a preview image collage of your collection, run:
@@ -262,7 +284,7 @@ If you want to change the ratio of the pixelation then you can update the ratio 
 
 ```js
 const pixelFormat = {
-  ratio: 5 / 128,
+  ratio: 16 / 128,
 };
 ```
 
@@ -292,22 +314,32 @@ npm run rarity
 The output will look something like this:
 
 ```sh
-Trait type: Top lid
+Trait type: Weapons
 {
-  trait: 'High',
-  chance: '30',
-  occurrence: '3 in 20 editions (15.00 %)'
+  trait: 'Bow and Arrow',
+  weight: '1',
+  occurrence: '7 in 25 editions (28.00 %)'
 }
 {
-  trait: 'Low',
-  chance: '20',
-  occurrence: '3 in 20 editions (15.00 %)'
+  trait: 'Double Sword',
+  weight: '1',
+  occurrence: '3 in 25 editions (12.00 %)'
 }
 {
-  trait: 'Middle',
-  chance: '50',
-  occurrence: '14 in 20 editions (70.00 %)'
+  trait: 'Scythe',
+  weight: '1',
+  occurrence: '4 in 25 editions (16.00 %)'
+}
+{
+  trait: 'Staff',
+  weight: '1',
+  occurrence: '7 in 25 editions (28.00 %)'
+}
+{
+  trait: 'Sword',
+  weight: '1',
+  occurrence: '4 in 25 editions (16.00 %)'
 }
 ```
 
-Hope you create some awesome artworks with this code 👄
+Hope you create some awesome artwork with this code.

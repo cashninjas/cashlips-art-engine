@@ -1,50 +1,58 @@
-const basePath = process.cwd();
-const { NETWORK } = require(`${basePath}/constants/network.js`);
-const fs = require("fs");
+import dotenv from 'dotenv'
+dotenv.config();
 
-const {
+import fs from "fs";
+
+import { NETWORK } from '../constants/network.js';
+import { writeMetaData } from '../src/main.js';
+import {
   baseUri,
+  baseIconUri,
   description,
   namePrefix,
   network,
   solanaMetadata,
-} = require(`${basePath}/src/config.js`);
+  iconFormat,
+} from '../src/config.js';
 
-// read json data
+const basePath = process.cwd();
 let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);
 let data = JSON.parse(rawdata);
 
-data.forEach((item) => {
+const updateInfo = () => {
+  data.forEach((item) => {
+    item.name = `${namePrefix} #${item.edition}`;
+    item.description = description;
+    if (network == NETWORK.sol) {
+      item.creators = solanaMetadata.creators;
+    } else {
+      item.image = `${baseUri}/${item.edition}.png`;
+      if (iconFormat.enabled) {
+        item.icon = `${baseIconUri}/${item.edition}.png`;
+      }
+    }
+    fs.writeFileSync(
+      `${basePath}/build/json/${item.edition}.json`,
+      JSON.stringify(item, null, 2)
+    );
+  });
+
+  writeMetaData(JSON.stringify(data, null, 2));
+
+  console.log(`Updated namePrefix ===> ${namePrefix}`);
+  console.log(`Updated description ===> ${description}`);
   if (network == NETWORK.sol) {
-    item.name = `${namePrefix} #${item.edition}`;
-    item.description = description;
-    item.creators = solanaMetadata.creators;
+    console.log(
+      `Updated creators to ===> ${JSON.stringify(
+        solanaMetadata.creators
+      )}`
+    );
   } else {
-    item.name = `${namePrefix} #${item.edition}`;
-    item.description = description;
-    item.image = `${baseUri}/${item.edition}.png`;
+    console.log(`Updated baseUri ===> ${baseUri}`);
+    console.log(`Updated baseIconUri ===> ${baseIconUri}`);
   }
-  fs.writeFileSync(
-    `${basePath}/build/json/${item.edition}.json`,
-    JSON.stringify(item, null, 2)
-  );
-});
-
-fs.writeFileSync(
-  `${basePath}/build/json/_metadata.json`,
-  JSON.stringify(data, null, 2)
-);
-
-if (network == NETWORK.sol) {
-  console.log(`Updated description for images to ===> ${description}`);
-  console.log(`Updated name prefix for images to ===> ${namePrefix}`);
-  console.log(
-    `Updated creators for images to ===> ${JSON.stringify(
-      solanaMetadata.creators
-    )}`
-  );
-} else {
-  console.log(`Updated baseUri for images to ===> ${baseUri}`);
-  console.log(`Updated description for images to ===> ${description}`);
-  console.log(`Updated name prefix for images to ===> ${namePrefix}`);
 }
+
+// Update info.
+// Execution begins here.
+updateInfo();
