@@ -1,3 +1,7 @@
+# Layers
+layers/*
+!layers/.gitkeep
+
 # Logs
 
 logs
