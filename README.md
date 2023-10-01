@@ -305,7 +305,7 @@ const gif = {
 
 ### Printing rarity data (Experimental feature)
 
-To see the percentages of each attribute across your collection, run:
+To see the percentages of each attribute across your collection and write rarity data to `build/json/_rarity.json`, run:
 
 ```sh
 npm run rarity
@@ -313,32 +313,35 @@ npm run rarity
 
 The output will look something like this:
 
-```sh
-Trait type: Weapons
+```json
 {
-  trait: 'Bow and Arrow',
-  weight: '1',
-  occurrence: '7 in 25 editions (28.00 %)'
-}
-{
-  trait: 'Double Sword',
-  weight: '1',
-  occurrence: '3 in 25 editions (12.00 %)'
-}
-{
-  trait: 'Scythe',
-  weight: '1',
-  occurrence: '4 in 25 editions (16.00 %)'
-}
-{
-  trait: 'Staff',
-  weight: '1',
-  occurrence: '7 in 25 editions (28.00 %)'
-}
-{
-  trait: 'Sword',
-  weight: '1',
-  occurrence: '4 in 25 editions (16.00 %)'
+  Weapons: [
+    {
+      trait: 'Bow and Arrow',
+      weight: '1',
+      occurrence: '0 in 11 editions (0.00 %)'
+    },
+    {
+      trait: 'Double Sword',
+      weight: '1',
+      occurrence: '2 in 11 editions (18.18 %)'
+    },
+    {
+      trait: 'Scythe',
+      weight: '1',
+      occurrence: '2 in 11 editions (18.18 %)'
+    },
+    {
+      trait: 'Staff',
+      weight: '1',
+      occurrence: '3 in 11 editions (27.27 %)'
+    },
+    {
+      trait: 'Sword',
+      weight: '1',
+      occurrence: '4 in 11 editions (36.36 %)'
+    }
+  ]
 }
 ```
 
