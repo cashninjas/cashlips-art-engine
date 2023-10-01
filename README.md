@@ -263,7 +263,7 @@ npm run openai
 
 ### Generate a preview image
 
-Create a preview image collage of your collection, run:
+Create a preview image collage of your collection, just build your collection, then run:
 
 ```sh
 npm run preview
