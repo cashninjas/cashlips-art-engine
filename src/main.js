@@ -40,7 +40,7 @@ const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = format.smoothing;
 const iconCanvas = createCanvas(iconFormat.width, iconFormat.height);
 const iconCtx = iconCanvas.getContext("2d");
-const DNA_DELIMITER = "-";
+const DNA_DELIMITER = "\n";
 var metadataList = [];
 var attributesList = [];
 var dnaList = new Set();
@@ -86,8 +86,8 @@ const getElements = (path) => {
     .readdirSync(path)
     .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
     .map((i, index) => {
-      if (i.includes("-")) {
-        throw new Error(`layer name can not contain dashes, please fix: ${i}`);
+      if (i.includes(DNA_DELIMITER)) {
+        throw new Error(`layer name can not contain ${DNA_DELIMITER}, please fix: ${i}`);
       }
       return {
         id: index,
