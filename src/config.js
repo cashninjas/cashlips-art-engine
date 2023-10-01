@@ -88,7 +88,8 @@ const layerConfigurations = [
   {
     growEditionSizeTo: 11,
     layersOrder: [
-      { name: "Background",
+      {
+        name: "Background",
         options: {
           bypassDNA: false,
         },

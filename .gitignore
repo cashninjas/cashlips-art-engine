@@ -51,6 +51,7 @@ build/Release
 
 build/
 build.bak/
+layers.bak/
 dist/
 node_modules/
 jspm_packages/
