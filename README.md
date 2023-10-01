@@ -315,31 +315,31 @@ The output will look something like this:
 
 ```json
 {
-  Weapons: [
+  "Weapons": [
     {
-      trait: 'Bow and Arrow',
-      weight: '1',
-      occurrence: '0 in 11 editions (0.00 %)'
+      "trait": "Bow and Arrow",
+      "weight": "1",
+      "occurrence": "1 in 11 editions (9.09 %)"
     },
     {
-      trait: 'Double Sword',
-      weight: '1',
-      occurrence: '2 in 11 editions (18.18 %)'
+      "trait": "Double Sword",
+      "weight": "1",
+      "occurrence": "4 in 11 editions (36.36 %)"
     },
     {
-      trait: 'Scythe',
-      weight: '1',
-      occurrence: '2 in 11 editions (18.18 %)'
+      "trait": "Scythe",
+      "weight": "1",
+      "occurrence": "3 in 11 editions (27.27 %)"
     },
     {
-      trait: 'Staff',
-      weight: '1',
-      occurrence: '3 in 11 editions (27.27 %)'
+      "trait": "Staff",
+      "weight": "1",
+      "occurrence": "1 in 11 editions (9.09 %)"
     },
     {
-      trait: 'Sword',
-      weight: '1',
-      occurrence: '4 in 11 editions (36.36 %)'
+      "trait": "Sword",
+      "weight": "1",
+      "occurrence": "2 in 11 editions (18.18 %)"
     }
   ]
 }

@@ -72,11 +72,12 @@ const getRarity = () => {
     }
   }
 
-  console.log(rarityData);
+  let prettyData = JSON.stringify(rarityData, null, 2)
+  console.log(prettyData);
 
   fs.writeFileSync(
     `${basePath}/build/json/_rarity.json`,
-    JSON.stringify(rarityData, null, 2)
+    prettyData
   );
 }
 
