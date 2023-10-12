@@ -19,7 +19,8 @@
     "pixelate": "node utils/pixelate.js",
     "update_info": "node utils/update_info.js",
     "preview_gif": "node utils/preview_gif.js",
-    "openai": "node utils/openai.js"
+    "openai": "node utils/openai.js",
+    "bcmr": "node utils/bcmr.js"
   },
   "author": "CashNinjas",
   "license": "MIT",

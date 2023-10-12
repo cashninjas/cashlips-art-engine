@@ -303,6 +303,16 @@ const gif = {
 };
 ```
 
+### Generate BCMR for existing collection
+
+If you already have a collection, make sure the `build/json` metadata files are in place and run:
+
+```sh
+npm run bcmr
+```
+
+You should now see `bitcoin-cash-metadata-registry.json` in the `build/bcmr` directory.
+
 ### Printing rarity data (Experimental feature)
 
 To see the percentages of each attribute across your collection and write rarity data to `build/json/_rarity.json`, run:
