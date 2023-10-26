@@ -12,8 +12,8 @@ const collectionName = "The Reapers"; // Name of your collection.
 const collectionDescription = "The Reapers collection consists of 10,000 unique pieces. Every Reaper holder also got the opportunity to take part in the Reaper Summons mint, a free add-on collection of 1,111 NFTs. The majority of the Summons are Dragons, but the set also includes new Reapers and 3D art!"; // Description of your collection.
 const namePrefix = "Reaper"; // Prefix for the NFT name.
 const description = "https://reapers.cash"; // NFT description.
-const baseUri = process.env.SHINOBI_BASE_URI || "ipfs://Qmb71z6NjPzT4pSZGMTCkH1hEKg9vGTzqnBNfAd3tWeBNu";
-const baseIconUri = process.env.SHINOBI_BASE_ICON_URI || "ipfs://QmVm2v4NXMTXJi1RwnYUbp2ixPErLqCLKR34CU7fxE6QBD";
+const baseUri = process.env.SHINOBI_BASE_URI || "ipfs://bafybeif5vhnowtqre7c3z5tgezccfgvhelqlgp54np6jsersuv7sylqzky";
+const baseIconUri = process.env.SHINOBI_BASE_ICON_URI || "ipfs://bafybeidoidntyzjzifqwdk3um4e2j2jk2ppslhq4mypapunbmbthya4eaq";
 
 // Background for your collection. This is used for OpenAI integration.
 // Unused for Reapers!
