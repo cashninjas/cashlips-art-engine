@@ -8,15 +8,16 @@ import { NETWORK } from '../constants/network.js';
 const network = NETWORK.bch;
 
 // General collection metadata.
-const collectionName = "Shinobi"; // Name of your collection.
-const collectionDescription = "Elite digital ninjas, guardians of BCH."; // Description of your collection.
-const namePrefix = "Shinobi"; // Prefix for the NFT name.
-const description = "Elite digital ninja, guardian of BCH."; // NFT description.
-const baseUri = process.env.SHINOBI_BASE_URI || "ipfs://NewUriToReplace/images";
-const baseIconUri = process.env.SHINOBI_BASE_ICON_URI || "ipfs://NewUriToReplace/icons";
+const collectionName = "The Reapers"; // Name of your collection.
+const collectionDescription = "The Reapers collection consists of 10,000 unique pieces. Every Reaper holder also got the opportunity to take part in the Reaper Summons mint, a free add-on collection of 1,111 NFTs. The majority of the Summons are Dragons, but the set also includes new Reapers and 3D art!"; // Description of your collection.
+const namePrefix = "Reaper"; // Prefix for the NFT name.
+const description = "https://reapers.cash"; // NFT description.
+const baseUri = process.env.SHINOBI_BASE_URI || "ipfs://Qmb71z6NjPzT4pSZGMTCkH1hEKg9vGTzqnBNfAd3tWeBNu";
+const baseIconUri = process.env.SHINOBI_BASE_ICON_URI || "ipfs://QmVm2v4NXMTXJi1RwnYUbp2ixPErLqCLKR34CU7fxE6QBD";
 
 // Background for your collection. This is used for OpenAI integration.
-const collectionBackground = `The Shinobi are elite digital ninjas, guardians of the BCH Blockchain and its Cashtokens. Entrusted by the mysterious Satoshi, they blend cryptographic arts with ancient martial traditions, ensuring the integrity and balance of the decentralized world.`;
+// Unused for Reapers!
+const collectionBackground = ``;
 
 // BCMR specific metadata.
 const bcmrMetadata = {
@@ -28,12 +29,11 @@ const bcmrMetadata = {
   },
   latestRevision: "",
   registryIdentity: {
-    name: "Project Registry",
-    description: "Description for your registry.",
+    name: "Reapers Registry",
+    description: "Registry for the Reapers collection.",
     uris: {
-      icon: "https://example.com/img/icon.png",
-      web: "https://example.com/",
-      registry: "https://example.com/.well-known/bitcoin-cash-metadata-registry.json"
+      icon: "https://reapers.cash/images/registry.png",
+      web: "https://reapers.cash/",
     }
   },
   identities: {},
@@ -44,16 +44,14 @@ const bcmrMetadata = {
 // https://bitcash.dev/guide/cashtokens.html
 const bchMetadata = {
   category: "YOUR_GENESIS_UNSPENT_TX",
-  symbol: "SHINOBI",
+  symbol: "REAPER",
   uris: {
-    icon: "",
-    image: "",
-    web: "",
-    telegram: "",
-    twitter: "",
-    youtube: "",
-    instagram: "",
-    reddit: "",
+    icon: "https://reapers.cash/images/icon.png",
+    image: "https://reapers.cash/images/logo.png",
+    web: "https://reapers.cash/",
+    telegram: "https://t.me/ReapersNFT",
+    twitter: "https://twitter.com/ReapersNFT",
+    instagram: "https://www.instagram.com/thereapernft/",
   },
 };
 
@@ -86,18 +84,14 @@ const solanaMetadata = {
 // Advanced configuration.
 const layerConfigurations = [
   {
-    growEditionSizeTo: 11,
+    growEditionSizeTo: 10000,
     layersOrder: [
-      {
-        name: "Background",
-        options: {
-          bypassDNA: false,
-        },
-      },
-      { name: "Glow" },
-      { name: "Weapons", options: { blend: MODE.overlay, opacity: 0.9 } },
-      { name: "Body" },
+      { name: "Background" },
+      { name: "Outfit" },
+      { name: "Head" },
       { name: "Eyes" },
+      { name: "Hands" },
+      { name: "Special" },
     ],
   },
 ];
@@ -107,9 +101,9 @@ const shuffleLayerConfigurations = false;
 const debugLogs = false;
 
 const format = {
-  width: 512,
-  height: 512,
-  smoothing: true,
+  width: 2048,
+  height: 2048,
+  smoothing: false,
 };
 
 // Icon metadata is not supported for Solana.
@@ -120,10 +114,10 @@ const iconFormat = {
 };
 
 const gif = {
-  export: false,
+  export: true,
   repeat: 0,
   quality: 100,
-  delay: 500,
+  delay: 1000,
 };
 
 const text = {
@@ -140,7 +134,7 @@ const text = {
 };
 
 const pixelFormat = {
-  ratio: 16 / 128,
+  ratio: 32 / 128,
 };
 
 const background = {
@@ -157,18 +151,18 @@ const rarityDelimiter = "#";
 const uniqueDnaTorrance = 10000;
 
 const preview = {
-  thumbPerRow: 5,
+  thumbPerRow: 10,
   thumbWidth: 50,
   imageRatio: format.height / format.width,
   imageName: "preview.png",
 };
 
 const preview_gif = {
-  numberOfImages: 5,
-  order: "MIXED", // ASC, DESC, MIXED
+  numberOfImages: 25,
+  order: "ASC", // ASC, DESC, MIXED
   repeat: 0,
   quality: 100,
-  delay: 500,
+  delay: 1000,
   imageName: "preview.gif",
 };
 
