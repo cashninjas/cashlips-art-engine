@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, Image } from 'canvas';
 import fs from "fs";
 
 import {
@@ -32,7 +32,7 @@ const migrate = () => {
 
   // Loop through each item and add new fields.
   // This currently is the icon, and image/icon hash.
-  data.forEach(async (item) => {
+  data.forEach((item) => {
     // Update hash for image.
     item.imageHash = imageHash256(`${buildDir}/images/${item.edition}.png`);
 
@@ -40,10 +40,13 @@ const migrate = () => {
     if (iconFormat.enabled) {
       // Check if icon exists. if it doesn't, create it and add the hash.
       if (!fs.existsSync(`${buildDir}/icons/${item.edition}.png`)) {
+        console.log(`Processing Image ${item.edition}.png`);
+
         const canvas = createCanvas(iconFormat.width, iconFormat.height);
         const ctx = canvas.getContext("2d");
 
-        const image = await loadImage(`${buildDir}/images/${item.edition}.png`);
+        let image = new Image();
+        image.src = `${buildDir}/images/${item.edition}.png`;
         ctx.drawImage(image, 0, 0, iconFormat.width, iconFormat.height);
 
         fs.writeFileSync(
