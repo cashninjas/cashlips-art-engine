@@ -20,7 +20,8 @@
     "update_info": "node utils/update_info.js",
     "preview_gif": "node utils/preview_gif.js",
     "openai": "node utils/openai.js",
-    "bcmr": "node utils/bcmr.js"
+    "bcmr": "node utils/bcmr.js",
+    "migrate": "node utils/migrate.js"
   },
   "author": "CashNinjas",
   "license": "MIT",

@@ -92,8 +92,8 @@ const saveImageIcon = (_loadedImageObject) => {
   fs.writeFileSync(
     `${buildDir}/icons/${_loadedImageObject.imgObject.filename}`,
     iconCanvas.toBuffer("image/png")
-  )
-}
+  );
+};
 
 const createPixelatedImages = async () => {
   buildSetup();

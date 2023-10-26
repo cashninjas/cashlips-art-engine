@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 import { MODE } from '../constants/blend_mode.js';
@@ -9,14 +9,14 @@ const network = NETWORK.bch;
 
 // General collection metadata.
 const collectionName = "Shinobi"; // Name of your collection.
-const collectionDescription = "Elite digital ninjas, guardians of BCH." // Description of your collection.
+const collectionDescription = "Elite digital ninjas, guardians of BCH."; // Description of your collection.
 const namePrefix = "Shinobi"; // Prefix for the NFT name.
 const description = "Elite digital ninja, guardian of BCH."; // NFT description.
 const baseUri = process.env.SHINOBI_BASE_URI || "ipfs://NewUriToReplace/images";
 const baseIconUri = process.env.SHINOBI_BASE_ICON_URI || "ipfs://NewUriToReplace/icons";
 
 // Background for your collection. This is used for OpenAI integration.
-const collectionBackground = `The Shinobi are elite digital ninjas, guardians of the BCH Blockchain and its Cashtokens. Entrusted by the mysterious Satoshi, they blend cryptographic arts with ancient martial traditions, ensuring the integrity and balance of the decentralized world.`
+const collectionBackground = `The Shinobi are elite digital ninjas, guardians of the BCH Blockchain and its Cashtokens. Entrusted by the mysterious Satoshi, they blend cryptographic arts with ancient martial traditions, ensuring the integrity and balance of the decentralized world.`;
 
 // BCMR specific metadata.
 const bcmrMetadata = {
@@ -38,7 +38,7 @@ const bcmrMetadata = {
   },
   identities: {},
   license: "CC0-1.0"
-}
+};
 
 // Set the category to your CashToken genesis unspent.
 // https://bitcash.dev/guide/cashtokens.html
@@ -55,7 +55,7 @@ const bchMetadata = {
     instagram: "",
     reddit: "",
   },
-}
+};
 
 const solanaMetadata = {
   symbol: "SHO",
@@ -117,7 +117,7 @@ const iconFormat = {
   enabled: network != NETWORK.sol ? true : false,
   width: 256,
   height: 256,
-}
+};
 
 const gif = {
   export: false,

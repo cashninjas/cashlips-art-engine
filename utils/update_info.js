@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 import fs from "fs";
@@ -51,7 +51,7 @@ const updateInfo = () => {
     console.log(`Updated baseUri ===> ${baseUri}`);
     console.log(`Updated baseIconUri ===> ${baseIconUri}`);
   }
-}
+};
 
 // Update info.
 // Execution begins here.

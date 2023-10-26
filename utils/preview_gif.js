@@ -9,7 +9,7 @@ const imageDir = `${buildDir}/images`;
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 const { numberOfImages, order, repeat, quality, delay, imageName } =
-preview_gif;
+  preview_gif;
 
 let hashlipsGiffer = null;
 
@@ -45,7 +45,7 @@ if (parseInt(numberOfImages) > 0) {
 const imageList = [];
 tmpImageList.forEach((imgRef) => {
   imageList.push(loadImg(imgRef));
-})
+});
 
 const saveProjectPreviewGIF = async (_data) => {
   const { width, height } = format;

@@ -303,6 +303,16 @@ const gif = {
 };
 ```
 
+### Migrate legacy collections
+
+Legacy collections, built on HashLips, will not have all the attributes currently supported in Shinobi Art Engine. To migrate your legacy collection, make sure `src/config.js` is configured correctly, and the `build/images` and `build/json` directories are present, then run:
+
+```sh
+npm run migrate
+```
+
+This will generate icons in the `build/icons` directory, generate a BCMR file if required, and update any missing attributes in the `build/json` directory.
+
 ### Generate BCMR for existing collection
 
 If you already have a collection, make sure the `build/json` metadata files are in place and run:

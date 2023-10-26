@@ -11,7 +11,9 @@ let data = JSON.parse(rawdata);
 
 const updateBCMR = () => {
   // Make bcmr directory if it doesn't exist.
-  fs.mkdirSync(`${buildDir}/bcmr`);
+  if (!fs.existsSync(`${buildDir}/bcmr`)) {
+    fs.mkdirSync(`${buildDir}/bcmr`);
+  }
 
   // Write new metadata, including the BCMR file.
   writeMetaData(JSON.stringify(data, null, 2));

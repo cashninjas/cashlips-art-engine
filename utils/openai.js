@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 import fs from "fs";
@@ -22,7 +22,7 @@ Your task is to craft a distinctive, unique, and memorable name, and an engaging
   "description": "Detailed and captivating description of the NFT."
 }
 
-Ensure your response is strictly in the JSON format provided.`
+Ensure your response is strictly in the JSON format provided.`;
 
 const basePath = process.cwd();
 let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);
@@ -32,7 +32,7 @@ const asyncForEach = async (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
-}
+};
 
 const askGPT = async (item) => {
   let completion = await openai.chat.completions.create({
@@ -50,8 +50,8 @@ const askGPT = async (item) => {
   });
 
   // This "should" produce valid json... Luckily we have resume.
-  return JSON.parse(completion.choices[0].message.content)
-}
+  return JSON.parse(completion.choices[0].message.content);
+};
 
 // Only update items that have the default name/description.
 // That way items can be resumed. If a full reset is required,
@@ -85,7 +85,7 @@ const updateInfoWithAI = async () => {
 
   console.log(`Updated names using OpenAI`);
   console.log(`Updated descriptions using OpenAI`);
-}
+};
 
 // Update info.
 // Execution begins here.

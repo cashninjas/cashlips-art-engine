@@ -144,14 +144,13 @@ const saveImageIcon = async (_editionCount) => {
     0,
     iconFormat.width,
     iconFormat.height,
-
   );
 
   fs.writeFileSync(
     `${buildDir}/icons/${_editionCount}.png`,
     iconCanvas.toBuffer("image/png")
-  )
-}
+  );
+};
 
 const genColor = () => {
   let hue = Math.floor(Math.random() * 360);
@@ -357,8 +356,8 @@ const writeBCMR = () => {
   let date = new Date().toISOString();
 
   bcmr.latestRevision = date;
-  bcmr.identities[bchMetadata.category] = {}
-  let nfts = {}
+  bcmr.identities[bchMetadata.category] = {};
+  let nfts = {};
   data.forEach((o, i) => {
     let attributes = {};
     o.attributes.forEach((oldFormat) => {
@@ -377,7 +376,7 @@ const writeBCMR = () => {
         "icon-hash": o.iconHash,
         ...extraMetadata,
       },
-    }
+    };
   });
 
   bcmr.identities[bchMetadata.category][date] = {
@@ -389,12 +388,12 @@ const writeBCMR = () => {
       symbol: bchMetadata.symbol,
       nfts: { parse: { types: nfts } }
     }
-  }
+  };
 
   fs.writeFileSync(`${buildDir}/bcmr/bitcoin-cash-metadata-registry.json`, JSON.stringify(bcmr, null, 2));
 
   return;
-}
+};
 
 const saveMetaDataSingleFile = (_editionCount) => {
   let metadata = metadataList.find((meta) => meta.edition == _editionCount);
@@ -523,4 +522,4 @@ const startCreating = async () => {
   writeMetaData(JSON.stringify(metadataList, null, 2));
 };
 
-export { startCreating, buildSetup, getElements, writeMetaData };
+export { startCreating, buildSetup, getElements, writeMetaData, imageHash256 };
