@@ -5,6 +5,7 @@ import { createCanvas, Image } from 'canvas';
 import fs from "fs";
 
 import {
+  baseIconUri,
   iconFormat
 } from '../src/config.js';
 
@@ -55,6 +56,7 @@ const migrate = () => {
         );
 
         // Update hash for icon.
+        item.icon = `${baseIconUri}/${item.edition}.png`;
         item.iconHash = imageHash256(`${buildDir}/icons/${item.edition}.png`);
       }
     }
